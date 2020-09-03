@@ -10,29 +10,38 @@
 
 <body>
     <header>
-        <div class="container">
-            <h1 class="welcome">Timer</h1>
-            <h2 id="countdown"></h2>
-            <p id="main"></p>
+        <div class="scores">
+           <a href="highScores.html">View High Scores</a>
             </div>
+            
+    <div class="timer">
+        Time<span id="time">0</span>
+    </div>        
     </header>
-    <div id="container" class='container'> 
-        <!-- question div -->
-        <div id="questions-container" class="hide">
-            <div id="questions"></div>
-            <div id="answer-btn" class="btn-grid">
-            <button class="btn">Answer 1</button>
-            <button class="btn">Answer 2</button>
-            <button class="btn">Answer 3</button>
-            <button class="btn">Answer 4</button>
+
+    <main class="wrapper">
+    <div id="container" class="container"> 
+        <div id="start-screen" class="start">
+            <h1>Coding Quiz</h1>
+            <p>start</p>
+            <button id="start">start</button>
         </div>
+        <div id="questions" class="hide">
+            <h2 id="question-title"></h2>
+            <div id="choices" class="choices"> </div>
         </div>
-    <div class="controls"></div>
-    <div id="start-screen">
-        <button id="start" class="start-btn btn">Start Quiz</button> 
-        <button id="next-btn" class="next-btn btn hide">Next</button> 
-        </div>
-    </div>
+     </div>
+     
+     <div id="end-screen" class="hide">
+         <h2>All done</h2>
+         <p>Your final score is <span id="final-score"></span></p>
+         <p>Enter initials:
+             <input type="text" id="initials">
+             <button id="submit">Submit your score</button>
+         </p>
+     </div>
+
+    </main>
     <script src="./asset/script/script.js"></script>
 </body>
 

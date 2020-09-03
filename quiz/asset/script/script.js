@@ -1,166 +1,120 @@
-//timer var 
-var timerEl = document.getElementById('countdown')
-var startButton = document.getElementById('start')
-var mainEl = document.getElementById('main');
-
-var message ='Time is up'
-var words = message.big('');  
-
-//timer function starts at 60 
-function countdown() {
-    var timeLeft = 60;
-
-    var timeInterval = setInterval(function() {
-        if (timeLeft > 1) {
-          timerEl.textContent = timeLeft + ' seconds remaining';
-          timeLeft--;
-        } else if (timeLeft === 1) {
-          timerEl.textContent = timeLeft + ' second remaining';
-          timeLeft--;
-        } else {
-          timerEl.textContent = '';
-          clearInterval(timeInterval);
-          displayMessage();
-        }
-      }, 1000);
-    }
-    // display message
-    function displayMessage() {
-        var wordCount = 0;
-         
-            if (words[wordCount] === undefined) {
-              clearInterval(msgInterval);
-            } else {
-              mainEl.textContent = words[wordCount];
-              wordCount++;
-            }
-          }
-
-startButton.onclick= countdown;
-
-//the Quiz game vars
-var startButton = document.getElementById('start')
-var nextButton = document.getElementById('next-btn')
-var questionContainerElement= document.getElementById('questions-container')
-var questionElement = document.getElementById('questions')
-var answerButtonsElement = document.getElementById('answer-btn')
-var endButton = document.getElementById('end-game')
-
-let shuffledQuestion, currentQuestionIndex
-
-startButton.addEventListener('click', startGame)
-nextButton.addEventListener('click',() => {
-currentQuestionIndex++
-setNextQuestion()
-})
-
-function startGame() {
-startButton.classList.add('hide')
-shuffledQuestion = question.sort(()=> Math.random()-.5)
-currentQuestionIndex = 0
-questionContainerElement.classList.remove('hide')
-setNextQuestion()
-}
-
-function setNextQuestion() {
-    resetState()
-    showQuestion (shuffledQuestion[currentQuestionIndex])
-}
-
-function showQuestion(question) {
-questionElement.innerText = question.questions
-question.answers.forEach(answer =>  {
-    var button = document.createElement('button')
-    button.innerText = answer.text
-    button.classList.add('btn')
-    if (answer.correct ) {
-        button.dataset.correct = answer.correct
-    }
-    button.addEventListener('click', selectAnswer)
-    answerButtonsElement.appendChild(button)
-
-});
-}
-//removes unwanted elements
-function resetState() {
-    nextButton.classList.add('hide')
-    while (answerButtonsElement.firstChild) {
-        answerButtonsElement.removeChild (answerButtonsElement.firstChild)
-    }
-}
-
-function selectAnswer(e) {
-    var selectButton = e.target 
-    var correct = selectButton.dataset.correct
-       setStatusClass(document.body,correct) 
-        Array.from(answerButtonsElement.children).forEach( button => {
-        setStatusClass(button,button.dataset.correct)
-    })
-    if (correct) { window.alert('correct')
-        
-    } else { window.alert('wrong')
-        
-    }
-    if(shuffledQuestion.length > currentQuestionIndex ) {
-        nextButton.classList.remove('hide')
-    } else {
-        endButton.innerText = 'End Game'
-        endButton.classList.remove
-    }
-    nextButton.classList.remove('hide')
-}
-
-function setStatusClass(element, correct) {
-    clearStatusClass(element)
-    if (correct){
-        element.classList.add('correct')
-    }else {
-        element.classList.add('wrong')
-    }
-}
-
-function clearStatusClass(element) {
-    element.classList.remove('correct')
-    element.classList.remove('wrong')
-
-}
-
 // the arry of questions for the quiz game
-var question = [
+var questions = [
     {
-     questions: 'How do you apply background color CSS styles to a web page?', 
-     answers:[ 
-    { text:'background-color',correct:true },
-    { text:'colorbackground',correct:false },
-    { text:'color-background',correct:false},
-    { text:'backcolorground',correct:false}
- ]
+     title: "How do you apply background color CSS styles to a web page?", 
+     choices:["background-color","colorbackground","color-background","backcolorground"],
+    answer:"background-color",
+},
+ {
+     title: 'How to Link to a CSS file to your HTML file?', 
+        choices:['rel-style-sheet','<link stylesheet','<link rel="stylesheet" href="styles.css">',' href="styles.css'], 
+        answers:'<link rel="stylesheet" href="styles.css">',
+ },
+ {
+      title:'How do you apply JavaScript to a web page?',  
+    choices:['<script src="my-code.js"><script>','<script "my-code.js"></script>','<script .js"></script>','<script src="my-code.js"></script>'],
+    answers:'<script src="my-code.js"></script>',
+ 
 },
 {
-    questions: 'How to Link to a CSS file to your HTML file?', 
-    answers:[ 
-   { text:'rel-style-sheet',correct:false },
-   { text:'',correct:false },
-   { text:'<link rel="stylesheet" href="styles.css">',correct:true },
-   { text:'<link stylesheet',correct:false }
-]
-},
-{
-    questions: 'How do you apply JavaScript to a web page?', 
-    answers:[ 
-   { text:'<script src="my-code.js"><script>',correct:false },
-   { text:'<script "my-code.js"></script>',correct:false },
-   { text:'<script .js"></script>',correct:false },
-   { text:'<script src="my-code.js"></script>',correct:true },
-]
-},
-{
-    questions: 'How to change DOCTYPE for HTML5? ?', 
-    answers:[ 
-   { text:'<!DOCTYPE >',correct:false},
-   { text:'<DOCTYPE html>',correct:false },
-   { text:'<!DOC html>',correct:false },
-   { text:'<!DOCTYPE html>',correct:true },
-]
+    title:'How to change DOCTYPE for HTML5?',
+    choices:['<!DOCTYPE >','<DOCTYPE html>','<!DOC html>','<!DOCTYPE html>'],
+    answers:'<!DOCTYPE html>',
 },
 ]
+
+var timerId;
+var time = 75;
+var currentQuestionIndex = 0;
+
+var startButton = document.querySelector("#start");
+var startScreenEl = document.querySelector("#start-screen");
+var questionsEl = document.querySelector("#questions");
+var timeEl = document.querySelector("#time");
+var submitButton = document.querySelector('#submit')
+
+var questionClick = function(event) {
+    var userGuess = event.target.value;
+    var correctAnswer = questions[currentQuestionIndex].answer
+
+    if (userGuess === correctAnswer) {
+        time = time -15;
+
+        if(time < 0) {
+            time = 0 
+        }
+
+        timeEl.textContent = time;
+    }
+currentQuestionIndex++;
+if (currentQuestionIndex === questions.length) {
+    quizEnd();
+}else {
+    getQuestion();
+}
+};
+
+var getQuestion = function() {
+var currentQuestion = questions[currentQuestionIndex];
+
+var questionTitleEl = document.querySelector("#question-title");
+questionTitleEl.textContent = currentQuestion.title;
+var choicesEl = document.querySelector("#choices");
+choicesEl.innerHTML = '';
+
+for (var i = 0; i < currentQuestion.choices.length; i++ ) {
+    var buttonChoicesEl = document.createElement('button');
+    buttonChoicesEl.setAttribute("value", currentQuestion.choices[i]);
+    buttonChoicesEl.textContent = i + '.' + currentQuestion.choices[i];
+    buttonChoicesEl.addEventListener('click', questionClick);
+
+choicesEl.appendChild(buttonChoicesEl);
+}
+};
+
+var quizEnd = function () {
+    clearInterval(timerId);
+    questionsEl.classList.toggle('hide');
+    var finalScoreEL = document.querySelector('#final-score');
+    finalScoreEL.textContent = time;
+    var endScreenEl = document.querySelector('#end-screen');
+    endScreenEl.classList.toggle('hide');
+}
+
+var clockTick = function () {
+    time--;
+    timeEl.textContent = time;
+if (time <= 0) {
+    quizEnd();
+}
+};
+
+var startQuiz = function () {
+    startScreenEl.classList.toggle('hide');
+    questionsEl.classList.toggle('hide');
+    timerId = setInterval(clockTick, 1000);
+    getQuestion();
+};
+
+var saveHighScore = function() {
+    var userInitialsEL = document.querySelector("#initials");
+    var userInitialsValue = userInitialsEL.value.trim();
+    var newScore = {
+        initials: userInitialsValue,
+        score: time
+    };
+
+var highScore = JSON.parse(localStorage.getItem('highscores')) || [];
+
+highScore.push(newScore);
+localStorage.setItem('highscore', JSON.stringify(highScore));
+location.href = "highScores.html";
+};
+
+
+
+startButton.addEventListener('click', startQuiz)
+submitButton.addEventListener('click',saveHighScore)
+
+
+
