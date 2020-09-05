@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Time</title>
+    <link rel="stylesheet" href="./asset/css/style.css">
+</head>
+
+<body>
+    <header>
+        <div class="scores">
+           <a href="highScores.html">View High Scores</a>
+            </div>
+            
+    <div class="timer">
+        Time<span id="time">0</span>
+    </div>        
+    </header>
+
+    <main class="wrapper">
+    <div id="container" class="container"> 
+        <div id="start-screen" class="start">
+            <h1>Coding Quiz</h1>
+            <p>start</p>
+            <button id="start">start</button>
+        </div>
+        <div id="questions" class="hide">
+            <h2 id="question-title"></h2>
+            <div id="choices" class="choices"> </div>
+        </div>
+     </div>
+     
+     <div id="end-screen" class="hide">
+         <h2>All done</h2>
+         <p>Your final score is <span id="final-score"></span></p>
+         <p>Enter initials:
+             <input type="text" id="initials">
+             <button id="submit">Submit your score</button>
+         </p>
+     </div>
+
+    </main>
+    <script src="./asset/script/script.js"></script>
+</body>
+
+</html>
